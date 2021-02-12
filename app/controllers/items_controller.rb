@@ -18,9 +18,10 @@ class ItemsController < ApplicationController
   end
 
   private
-
+  
   def item_params
-    params.require(:item).permit(:image).merge(user_id: current_user.id)
+    params.require(:item).permit(:image, :name, :description, :category_id, :product_state_id,
+      :charge_burden_id, :source_area_id, :delivery_day_id, :price).merge(user_id: current_user.id)
   end
 
   def move_to_signed_in
