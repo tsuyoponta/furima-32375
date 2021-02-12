@@ -9,17 +9,23 @@ class Item < ApplicationRecord
   belongs_to :source_area
   belongs_to :delivery_day
 
-  validates :image,       presence: true
-  validates :name,        presence: true
-  validates :description, presence: true
-  validates :price,       presence: true
-  validates :price,       numericality: { with: /\A[0-9]+\z/, message: 'Half-width number' }
-  validates :price,
-            numericality: { greater_than_or_equal_to: 300, less_than_or_equal_to: 9_999_999, message: 'Out of setting range' }
+  with_options presence: true do
+    validates :image
+    validates :name
+    validates :description
+    validates :price
+  end
 
-  validates :category_id,      numericality: { other_than: 1, message: 'Select' }
-  validates :product_state_id, numericality: { other_than: 1, message: 'Select' }
-  validates :charge_burden_id, numericality: { other_than: 1, message: 'Select' }
-  validates :source_area_id,   numericality: { other_than: 1, message: 'Select' }
-  validates :delivery_day_id,  numericality: { other_than: 1, message: 'Select' }
+  validates :price, numericality: { with: /\A[0-9]+\z/, message: 'Half-width number' }
+  validates :price, numericality: {
+    greater_than_or_equal_to: 300, less_than_or_equal_to: 9_999_999, message: 'Out of setting range'
+  }
+
+  with_options numericality: { other_than: 1, message: 'Select' } do
+    validates :category_id
+    validates :product_state_id
+    validates :charge_burden_id
+    validates :source_area_id
+    validates :delivery_day_id
+  end
 end
