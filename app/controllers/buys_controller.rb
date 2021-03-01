@@ -21,7 +21,9 @@ class BuysController < ApplicationController
   private
 
   def buy_params
-    params.require(:buy_address).permit(:postal_code, :source_area_id, :city, :block, :building_name, :phone_number).merge(user_id: current_user.id, item_id: params[:item_id], token: params[:token])
+    params.require(:buy_address).permit(:postal_code, :source_area_id, :city, :block, :building_name, :phone_number).merge(
+      user_id: current_user.id, item_id: params[:item_id], token: params[:token]
+    )
   end
 
   def set_item
@@ -29,13 +31,11 @@ class BuysController < ApplicationController
   end
 
   def move_to_root
-    if (current_user.id == @item.user_id) || (current_user.id && @item.buy.present?)
-      redirect_to root_path
-    end
+    redirect_to root_path if (current_user.id == @item.user_id) || (current_user.id && @item.buy.present?)
   end
 
   def pay_item
-    Payjp.api_key = ENV["PAYJP_SECRET_KEY"]
+    Payjp.api_key = ENV['PAYJP_SECRET_KEY']
     Payjp::Charge.create(
       amount: @item.price,
       card: buy_params[:token],

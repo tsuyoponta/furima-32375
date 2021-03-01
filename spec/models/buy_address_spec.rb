@@ -4,7 +4,7 @@ RSpec.describe BuyAddress, type: :model do
   before do
     @buy_address = FactoryBot.build(:buy_address)
   end
-  
+
   describe '商品購入機能' do
     context '商品が購入できる場合' do
       it 'すべての値が正しく入力されていれば保存できる' do
@@ -19,14 +19,14 @@ RSpec.describe BuyAddress, type: :model do
         expect(@buy_address.errors.full_messages).to include("Postal code can't be blank")
       end
       it 'postal_codeにハイフンがないと保存できない' do
-        @buy_address.postal_code = 1234567
+        @buy_address.postal_code = 1_234_567
         @buy_address.valid?
-        expect(@buy_address.errors.full_messages).to include("Postal code is invalid. Include hyphen(-)")
+        expect(@buy_address.errors.full_messages).to include('Postal code Input correctly')
       end
       it 'source_areaが空では保存できない' do
         @buy_address.source_area_id = ''
         @buy_address.valid?
-        expect(@buy_address.errors.full_messages).to include("Source area Select")
+        expect(@buy_address.errors.full_messages).to include('Source area Select')
       end
       it 'cityが空では保存できない' do
         @buy_address.city = ''
@@ -51,12 +51,17 @@ RSpec.describe BuyAddress, type: :model do
       it 'phone_numberにハイフンがあると保存できない' do
         @buy_address.phone_number = '090-1234-5678'
         @buy_address.valid?
-        expect(@buy_address.errors.full_messages).to include("Phone number Input only number")
+        expect(@buy_address.errors.full_messages).to include('Phone number Input only number')
       end
       it 'phone_numberが12桁以上だと保存できない' do
         @buy_address.phone_number = '090123456789'
         @buy_address.valid?
-        expect(@buy_address.errors.full_messages).to include("Phone number Input only number")
+        expect(@buy_address.errors.full_messages).to include('Phone number Input only number')
+      end
+      it 'tokenが存在しなければ保存できない' do
+        @buy_address.token = ''
+        @buy_address.valid?
+        expect(@buy_address.errors.full_messages).to include("Token can't be blank")
       end
     end
   end

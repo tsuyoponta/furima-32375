@@ -6,5 +6,6 @@ FactoryBot.define do
     block               { Gimei.town.kanji }
     building_name       { '1-2-3' }
     phone_number        { '09012345678' }
+    token               { 'tok_abcdefghijk00000000000000000' }
   end
 end
