@@ -10,6 +10,10 @@ RSpec.describe BuyAddress, type: :model do
       it 'すべての値が正しく入力されていれば保存できる' do
         expect(@buy_address).to be_valid
       end
+      it 'building_nameが空でも保存できる' do
+        @buy_address.building_name = ''
+        expect(@buy_address).to be_valid
+      end
     end
 
     context '商品が購入できない場合' do
@@ -28,6 +32,11 @@ RSpec.describe BuyAddress, type: :model do
         @buy_address.valid?
         expect(@buy_address.errors.full_messages).to include('Source area Select')
       end
+      it 'source_areaが1では保存できない' do
+        @buy_address.source_area_id = 1
+        @buy_address.valid?
+        expect(@buy_address.errors.full_messages).to include('Source area Select')
+      end
       it 'cityが空では保存できない' do
         @buy_address.city = ''
         @buy_address.valid?
@@ -37,11 +46,6 @@ RSpec.describe BuyAddress, type: :model do
         @buy_address.block = ''
         @buy_address.valid?
         expect(@buy_address.errors.full_messages).to include("Block can't be blank")
-      end
-      it 'building_nameが空では保存できない' do
-        @buy_address.building_name = ''
-        @buy_address.valid?
-        expect(@buy_address.errors.full_messages).to include("Building name can't be blank")
       end
       it 'phone_numberが空では保存できない' do
         @buy_address.phone_number = ''
@@ -58,10 +62,20 @@ RSpec.describe BuyAddress, type: :model do
         @buy_address.valid?
         expect(@buy_address.errors.full_messages).to include('Phone number Input only number')
       end
-      it 'tokenが存在しなければ保存できない' do
+      it 'tokenが空では保存できない' do
         @buy_address.token = ''
         @buy_address.valid?
         expect(@buy_address.errors.full_messages).to include("Token can't be blank")
+      end
+      it 'user_idが空では保存できない' do
+        @buy_address.user_id = ''
+        @buy_address.valid?
+        expect(@buy_address.errors.full_messages).to include("User can't be blank")
+      end
+      it 'item_idが空では保存できない' do
+        @buy_address.item_id = ''
+        @buy_address.valid?
+        expect(@buy_address.errors.full_messages).to include("Item can't be blank")
       end
     end
   end
