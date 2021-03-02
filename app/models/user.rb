@@ -5,14 +5,14 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   PASSWORD_REGEX = /\A(?=.*?[a-z])(?=.*?\d)[a-z\d]+\z/i.freeze
-  validates_format_of :password, with: PASSWORD_REGEX, message: 'は半角英数字混合で設定してください'
+  validates_format_of :password, with: PASSWORD_REGEX, message: 'Include both letters and numbers'
 
-  with_options presence: true, format: { with: /\A[ぁ-んァ-ヶー-龥々]+\z/, message: 'には全角文字を使用してください' } do
+  with_options presence: true, format: { with: /\A[ぁ-んァ-ヶー-龥々]+\z/, message: 'Full-width characters' } do
     validates :last_name
     validates :first_name
   end
 
-  with_options presence: true, format: { with: /\A[ァ-ヶ]+\z/, message: 'には全角カタカナを使用してください' } do
+  with_options presence: true, format: { with: /\A[ァ-ヶー－]+\z/, message: 'Full-width katakana characters' } do
     validates :last_name_kana
     validates :first_name_kana
   end
@@ -21,4 +21,5 @@ class User < ApplicationRecord
   validates :birthday, presence: true
 
   has_many :items
+  has_many :buys
 end
